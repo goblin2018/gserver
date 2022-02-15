@@ -1,0 +1,17 @@
+name: Deploy To Ali
+on: [release]
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Aliyun Container
+        uses: aliyun/acr-login@v1
+        with:
+          login-server: https://registry.cn-shanghai.aliyuncs.com
+          username: "${{secrets.REGISTRY_USERNAME}}"
+          password: "${{secrets.REGISTRY_PASSWORD}}"
+      - name: Build Container
+        run: make container
+      - name: Push Docker Image
+        run: make push-ali
