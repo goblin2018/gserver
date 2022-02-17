@@ -1,0 +1,16 @@
+name: Test SSH
+on: [push]
+jobs:
+  first:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            ls -al
