@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set Version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Login to Aliyun Container
         uses: aliyun/acr-login@v1
         with:
@@ -26,4 +28,4 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker pull registry.cn-shanghai.aliyuncs.com/${{ secrets.REPOSITORY_NAME }}:${{ github.ref }}
+            docker pull registry.cn-shanghai.aliyuncs.com/${{ secrets.REPOSITORY_NAME }}:${{ env.RELEASE_VERSION }}
