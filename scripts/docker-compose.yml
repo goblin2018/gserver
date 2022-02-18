@@ -24,7 +24,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   server:
-    image: "server:v1.0.12"
+    image: "server:latest"
     container_name: "server"
     expose:
       - 9000

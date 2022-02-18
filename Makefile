@@ -23,7 +23,12 @@ compose-up:
 	docker compose -f scripts/docker-compose.yml up -d
 
 
+pr:
+	echo $2
+
 tag:
+	$(eval ver = $(shell git describe --abbrev=0 --tags))
+	sed -i 's/server:latest/server:$(ver)/' scripts/docker-compose.yml
 	
 
 
