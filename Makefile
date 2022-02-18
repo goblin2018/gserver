@@ -13,6 +13,20 @@ container:
 push-ali:
 	$(eval ver = $(shell git describe --abbrev=0 --tags))
 	docker push registry.cn-shanghai.aliyuncs.com/fundshow/goblin:$(ver)
+
+compose:
+	docker compose up 
+
+compose-down:
+	docker compose -f scripts/docker-compose.yml down
+compose-up:
+	docker compose -f scripts/docker-compose.yml up -d
+
+
+tag:
+	
+
+
 clean:
 	rm -rf build
 

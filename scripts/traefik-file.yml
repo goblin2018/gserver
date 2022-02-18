@@ -1,0 +1,39 @@
+http:
+
+
+  routers:
+    # Define a connection between requests and services
+    my-router:
+      rule: "Path(`/foo`)"
+      service: service-foo
+    to-whoami:
+      rule:
+        "Host(`example.com`) && PathPrefix(`/whoami/`)"
+        # If the rule matches, applies the middleware
+      middlewares:
+        - test-user
+      # If the rule matches, forward to the whoami service (declared below)
+      service: whoami
+
+  middlewares:
+    # Define an authentication mechanism
+    test-user:
+      basicAuth:
+        users:
+          - test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/
+
+  services:
+    # Define how to reach an existing service on our infrastructure
+    whoami:
+      loadBalancer:
+        servers:
+          - url: "http://<private-ip-server-1>:<private-port-server-1>/"
+          - url: "http://<private-ip-server-2>:<private-port-server-2>/"
+
+tcp:
+  routers:
+    to-database:
+      entryPoints:
+        - "mysql"
+      rule: "HostSNI(`*`)"
+      service: database

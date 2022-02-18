@@ -5,22 +5,40 @@ services:
   traefik:
     image: "traefik:v2.6"
     container_name: "traefik"
+
     command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:9000"
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.web.address=:80
+      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entryPoints.websecure.address=:443
+      - --entryPoints.websecure.transport.respondingTimeouts.readTimeout=60
+      - --entryPoints.websecure.transport.respondingTimeouts.writeTimeout=60
+      - --entryPoints.redis.address=:6379
+      - --entryPoints.mysql.address=:3306
+
     ports:
-      - "9000:9000"
+      - "80:80"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
+  server:
+    image: "server:v1.0.12"
+    container_name: "server"
+    expose:
+      - 9000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.server.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.server.entrypoints=web"
+
+  redis:
+    image: redis
+    container_name: redis
+    expose:
+      - 6379
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis.rule=Host(`redis.localhost`)"
+      - "traefik.http.routers.redis.entrypoints=web"
