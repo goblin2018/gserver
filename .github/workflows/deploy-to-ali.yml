@@ -27,7 +27,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "scripts/docker-compose.yml"
-          target: "."
+          target: "server"
       - name: Pull Dokcer Image
         uses: appleboy/ssh-action@master
         with:
@@ -37,4 +37,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             docker pull registry.cn-shanghai.aliyuncs.com/${{ secrets.REPOSITORY_NAME }}:${{ env.RELEASE_VERSION }}
+            cd server
+            make update-container
             

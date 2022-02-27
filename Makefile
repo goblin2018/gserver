@@ -19,17 +19,18 @@ compose:
 
 compose-down:
 	docker compose -f scripts/docker-compose.yml down
-compose-up:
+compose-up: update-tag
 	docker compose -f scripts/docker-compose.yml up -d
+	sed -i 's/server:v[^"]*/server:server-version/' scripts/docker-compose.yml
 
 
-pr:
-	echo $2
-
-tag:
+update-tag:
 	$(eval ver = $(shell git describe --abbrev=0 --tags))
-	sed -i 's/server:latest/server:$(ver)/' scripts/docker-compose.yml
-	
+	sed -i 's/server:server-version/server:$(ver)/' scripts/docker-compose.yml
+
+update-container: update-tag
+	docker compose -f scripts/docker-compose.yml stop server
+	docker compose -f scripts/docker-compose.yml up -d --build
 
 
 clean:

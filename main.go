@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gserver/pkg/env"
 	"gserver/routers"
 	"log"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 )
 
 func main() {
+	env.Init()
 	fmt.Print("Hello Gserver")
 
 	s := &http.Server{
