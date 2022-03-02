@@ -1,0 +1,20 @@
+# Traefik dynamic configuration /etc/traefik/traefik.yml
+
+http:
+  routers:
+    # Define a connection between requests and services
+    server:
+      entryPoints:
+        - "web"
+      rule: "Host(`api.localhost`)"
+      service: server
+    pg:
+      entryPoints:
+        - "web"
+      rule:  "Host(`pg.localhost`)"
+      service: pg
+    redis:
+      entryPoints:
+        - "web"
+      rule:  "Host(`redis.localhost`)"
+      service: redis

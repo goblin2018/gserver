@@ -14,3 +14,9 @@ systemctl start docker
 systemctl status docker
 ```
 
+### 测试环境
+1. 数据库在本地
+2. 使用容器启动
+### 生产环境
+1. 使用云数据库
+2. 使用容器启动，并区分于测试环境

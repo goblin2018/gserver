@@ -5,6 +5,9 @@ build: clean
 run:
 	./build/gserver
 
+dev:
+	
+
 container:
 	$(eval ver = $(shell git describe --abbrev=0 --tags))
 	@echo  "build server:$(ver)"

@@ -1,3 +1,5 @@
+# Traefik static configuration /etc/traefik/traefik.yml
+
 ################################################################
 # API and dashboard configuration
 ################################################################
@@ -11,8 +13,16 @@ api:
 # Docker configuration backend
 ################################################################
 providers:
+  providersThrottleDuration: 10
   docker:
     exposedByDefault: false
+    network: "traefik-net"
+    endpoint: "unix:///var/run/docker.sock" # 默认配置
+
+  file:
+    filename: /etc/traefik/dynamic.yml # 动态配置地址
+    watch: true # 默认配置
+
 ################################################################
 # Traefik Logging
 ################################################################
@@ -22,9 +32,17 @@ log:
 ################################################################
 # Entrypoint
 ################################################################
+
+
 entryPoints:
   web:
     address: ":80"
+    transport:
+      respondingTimeouts:
+        readTimeout: 60
+        writeTimeout: 60
+        idleTimeout: 60
+    
     # http:
     #   redirections:
     #     entryPoint:
@@ -39,5 +57,8 @@ entryPoints:
     #   middlewares:
     #     - auth@file
     #     - strip@file
-  mysql:
-    address: ":3306"
+  pg:
+    address: ":5432"
+  redis:
+    address: ":6379"
+
