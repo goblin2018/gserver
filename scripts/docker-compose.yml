@@ -17,6 +17,9 @@ services:
   server:
     image: "server:server-version"
     container_name: "server"
+    depends_on:
+      - redis
+      - pg
     expose:
       - 9000
     labels:
