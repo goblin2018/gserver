@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"gserver/controllers"
 	"gserver/pkg/conf"
 	"gserver/pkg/env"
-	"gserver/routers"
 	"net/http"
 )
 
@@ -14,13 +14,17 @@ func main() {
 
 	s := &http.Server{
 		Addr:           fmt.Sprintf(":%d", conf.Server.Port),
-		Handler:        routers.InitRoute(),
+		Handler:        controllers.InitRoute(),
 		ReadTimeout:    conf.Server.ReadTimeout,
 		WriteTimeout:   conf.Server.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	s.ListenAndServe()
+	err := s.ListenAndServe()
+	if err != nil {
+		panic(fmt.Errorf("listen and server error: %v", err))
+		return
+	}
 
 	// go func() {
 	// 	if err := s.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {

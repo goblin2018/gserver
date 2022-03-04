@@ -7,7 +7,7 @@ func LoadGroup(r *gin.Engine) {
 
 	user := v1.Group("/user")
 	{
-		user.POST("")
+		user.POST("", AddUser)
 	}
 
 }

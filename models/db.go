@@ -40,6 +40,7 @@ func init() {
 	}
 
 	var sqlDb *sql.DB
+	sqlDb, err = db.DB()
 	sqlDb.SetMaxOpenConns(conf.DB.MaxOpenConns)
 	sqlDb.SetMaxIdleConns(conf.DB.MaxIdleConns)
 	sqlDb.SetConnMaxLifetime(conf.DB.ConnMaxLifetime)
@@ -47,7 +48,9 @@ func init() {
 }
 
 func migrate() {
-	err := db.AutoMigrate()
+	err := db.AutoMigrate(
+		//&User{}
+	)
 
 	if err != nil {
 		panic(fmt.Errorf("migrate error: %v", err))

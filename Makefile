@@ -1,11 +1,7 @@
 
+dev-init:
+	docker compose -f scripts/docker-compose-test.yml up -d
 
-build: clean
-	go build -o build/gserver ./main.go 
-run:
-	./build/gserver
-
-	
 
 container:
 	$(eval ver = $(shell git describe --abbrev=0 --tags))
@@ -16,11 +12,6 @@ push-ali:
 	$(eval ver = $(shell git describe --abbrev=0 --tags))
 	docker push registry.cn-shanghai.aliyuncs.com/fundshow/goblin:$(ver)
 
-compose:
-	docker compose up 
-
-compose-down:
-	docker compose -f scripts/docker-compose.yml down
 compose-up: update-tag
 	docker compose -f scripts/docker-compose.yml up -d
 	sed -i 's/server:v[^"]*/server:server-version/' scripts/docker-compose.yml
@@ -33,6 +24,10 @@ update-tag:
 update-server: update-tag
 	docker compose -f scripts/docker-compose.yml stop server
 	docker compose -f scripts/docker-compose.yml up -d --build
+
+
+dev:
+  cat $(shell go run main.go -e development)
 
 
 clean:

@@ -1,7 +1,7 @@
 package r
 
 import (
-	"gserver/e"
+	"gserver/pkg/e"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
