@@ -8,8 +8,8 @@ const (
 	Development = "development"
 )
 
-var env string
+var ENV string
 
 func Init() {
-	flag.StringVar(&env, "e", Production, "运行环境， 默认 production")
+	flag.StringVar(&ENV, "e", Production, "运行环境， 默认 production")
 }

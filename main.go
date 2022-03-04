@@ -1,17 +1,11 @@
 package main
 
 import (
-	"context"
-	"errors"
 	"fmt"
+	"gserver/pkg/conf"
 	"gserver/pkg/env"
 	"gserver/routers"
-	"log"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 )
 
 func main() {
@@ -19,30 +13,32 @@ func main() {
 	fmt.Print("Hello Gserver")
 
 	s := &http.Server{
-		Addr:           ":9000",
+		Addr:           fmt.Sprintf(":%d", conf.Server.Port),
 		Handler:        routers.InitRoute(),
-		ReadTimeout:    time.Second * 60,
-		WriteTimeout:   time.Second * 60,
+		ReadTimeout:    conf.Server.ReadTimeout,
+		WriteTimeout:   conf.Server.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	go func() {
-		if err := s.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
-			panic(err)
-		}
-	}()
+	s.ListenAndServe()
 
-	quit := make(chan os.Signal)
+	// go func() {
+	// 	if err := s.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
+	// 		panic(err)
+	// 	}
+	// }()
 
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	log.Println("Shutting down server ...")
+	// quit := make(chan os.Signal)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := s.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
-	}
-	log.Println("Server exiting")
+	// signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	// <-quit
+	// log.Println("Shutting down server ...")
+
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// defer cancel()
+	// if err := s.Shutdown(ctx); err != nil {
+	// 	log.Fatalf("Server forced to shutdown: %v", err)
+	// }
+	// log.Println("Server exiting")
 
 }

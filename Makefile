@@ -5,7 +5,6 @@ build: clean
 run:
 	./build/gserver
 
-dev:
 	
 
 container:
@@ -31,7 +30,7 @@ update-tag:
 	$(eval ver = $(shell git describe --abbrev=0 --tags))
 	sed -i 's/server:server-version/server:$(ver)/' scripts/docker-compose.yml
 
-update-container: update-tag
+update-server: update-tag
 	docker compose -f scripts/docker-compose.yml stop server
 	docker compose -f scripts/docker-compose.yml up -d --build
 

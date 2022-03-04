@@ -19,9 +19,6 @@ providers:
     network: "traefik-net"
     endpoint: "unix:///var/run/docker.sock" # 默认配置
 
-  file:
-    filename: /etc/traefik/dynamic.yml # 动态配置地址
-    watch: true # 默认配置
 
 ################################################################
 # Traefik Logging
@@ -57,8 +54,3 @@ entryPoints:
     #   middlewares:
     #     - auth@file
     #     - strip@file
-  pg:
-    address: ":5432"
-  redis:
-    address: ":6379"
-
