@@ -32,7 +32,7 @@ type redis struct {
 
 func init() {
 	Server = server{
-		Port:         8000,
+		Port:         9000,
 		ReadTimeout:  time.Minute,
 		WriteTimeout: time.Minute,
 	}
